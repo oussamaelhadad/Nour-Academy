@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nour Academy</title>
+    <meta name="description" content="Nour Academy landing page" />
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="script.js" defer></script>
+
+    <link rel="stylesheet" href="/src/styles/main.css" />
+  </head>
+  <body class="bg-gray-100">
+
+
+    <header class="bg-[#1F6F5C] text-white px-6 py-3.5 flex flex-col sm:flex-row justify-between items-center shadow-md">
+
+      <a href="" class="flex items-center gap-3 mb-2 sm:mb-0">
+        
+        <div class="text-xl font-bold text-white flex">
+          <img  class="h-9 w-auto object-contain rounded" src="assests/img/Logo académique Nour Academy en bleu et or.png" alt="">
+          Nour Academy
+        </div>
+      </a>
+
+      <p class="text-xs sm:text-sm font-light text-emerald-100 opacity-90 text-center sm:text-right">
+        Inscriptions 2026-2027 · Nador Centre · Hay Al Matar · Selouane
+      </p>
+    </header>
+
+    <section class="mt-[20px]">
+       <h1 class="font-bold text-[40px] pl-[65px]"> Trouvez le bon cours en 5 minutes </h1>
+       <p class="text-[#5B6675] text-[18px] pl-[65px]"> Choisissez, vérifiez, envoyez : votre dossier est complet du premier coup. </p>
+       </section>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 px-8">
+
+  <div class="lg:col-span-2 m-[20px]">
+    
+    <div class="flex flex-wrap gap-[20px] m-[15px]">
+      <div class="flex flex-col min-w-[200px]">
+        <label for="nivaux" class="mb-1 font-medium">Niveaux :</label>
+        <select id="nivaux" class="border rounded p-2 bg-white">
+          <option value="">Tous les niveaux</option>
+          <option value="Primaire">Primaire</option>
+          <option value="Collège">Collège</option>
+          <option value="Tronc commun">Tronc commun</option>
+          <option value="1ère Bac">1ère Bac</option>
+          <option value="2e Bac">2e Bac</option>
+        </select>
+      </div>
+
+      <div class="flex flex-col min-w-[200px]">
+        <label for="matiere" class="mb-1 font-medium">Matière :</label>
+        <select id="matiere" class="border rounded p-2 bg-white">
+          <option value="">Toutes les matières</option>
+          <option value="Mathématiques">Mathématiques</option>
+          <option value="Physique-Chimie">Physique-Chimie</option>
+          <option value="Français">Français</option>
+          <option value="SVT">SVT</option>
+          <option value="Anglais">Anglais</option>
+          <option value="Informatique">Informatique</option>
+        </select>
+      </div>
+    </div>
+
+    <section id="liste-cours" class="grid grid-cols-1 md:grid-cols-2 gap-[35px]">
+    </section>
+
+  </div>
+
+  
+  <div class="space-y-6">
+    
+   
+    <div id="panier" class="border rounded-lg p-4 bg-white shadow-sm">
+      <h2 class="font-bold text-xl mb-4">Ma sélection</h2>
+  
+    </div>
+
+
+
+  </div>
+
+</div>
+   
+  </body>
+</html>
