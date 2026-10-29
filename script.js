@@ -46,7 +46,7 @@ const cours = [
     niveau: "Collège",
     creneau: "Jeudi 16h - 18h",
     centre: "Hay Al Matar",
-    prix: 230,
+    prix: 350,
     places: 7
   },
   {
@@ -56,7 +56,7 @@ const cours = [
     niveau: "Collège",
     creneau: "Samedi 10h - 12h",
     centre: "Selouane",
-    prix: 230,
+    prix: 300,
     places: 0
   },
   {
@@ -121,12 +121,26 @@ const cours = [
   }
 ];
 
+
+const listeCours = document.getElementById("liste-cours");
+const filtreNiveau = document.getElementById("nivaux");
+const filtreMatiere = document.getElementById("matiere");
+const nombreResultats = document.getElementById("nombre-resultats");
+const messageVide = document.getElementById("message-vide");
+
+const panierContenu = document.getElementById("panierContenu");
+const panierEmpty = document.getElementById("panier-empty");
+const panierTotal = document.getElementById("panierTotal");
+
+let totalPrix = 0;
+let panierObj = {};
+
 function creerCarte(c) {
   return `
-    <article class="bg-white border border-slate-200 rounded-xl p-4">
+    <article class="bg-white border border-slate-200 rounded-xl p-4 flex flex-col gap-3">
 
-      <div class="flex justify-between items-center gap-2">
-        <span class="text-sm font-semibold text-emerald-800">
+      <div class="flex justify-between items-center gap-2 flex-wrap">
+        <span class="bg-emerald-50 text-emerald-800 text-xs font-semibold px-2 py-1 rounded-full">
           ${c.matiere}
         </span>
 
@@ -135,27 +149,33 @@ function creerCarte(c) {
         </span>
       </div>
 
-      <h3 class="font-bold text-lg mt-3">
+      <h3 class="text-lg font-bold text-slate-800">
         ${c.titre}
       </h3>
 
-      <p class="text-sm text-slate-500 mt-2">
-        ${c.creneau} - ${c.centre}
+      <p class="text-sm text-slate-500">
+        ${c.creneau}
       </p>
 
-      <p class="font-bold text-emerald-700 mt-3">
-        ${c.prix} MAD / mois
+      <p class="text-sm text-slate-500">
+        Centre : ${c.centre}
       </p>
 
-      <p class="text-sm mt-1">
-        ${c.places === 0 ? "Complet" : c.places + " places restantes"}
-      </p>
+      <div class="flex justify-between items-center gap-2 flex-wrap">
+        <p class="text-emerald-700 font-bold">
+          ${c.prix} MAD / mois
+        </p>
+
+        <p class="text-sm ${c.places === 0 ? "text-red-600" : "text-slate-500"}">
+          ${c.places === 0 ? "Complet" : c.places + " places restantes"}
+        </p>
+      </div>
 
       <button
         type="button"
         data-ajouter="${c.id}"
         ${c.places === 0 ? "disabled" : ""}
-        class="w-full min-h-11 mt-3 rounded-lg bg-emerald-800 text-white disabled:bg-slate-400"
+        class="w-full min-h-11 rounded-lg p-2 text-white bg-emerald-800 disabled:bg-slate-400 disabled:cursor-not-allowed"
       >
         ${c.places === 0 ? "Complet" : "Ajouter à ma sélection"}
       </button>
@@ -163,83 +183,71 @@ function creerCarte(c) {
     </article>
   `;
 }
-const listeCours = document.getElementById("liste-cours");
-const filtreNiveau = document.getElementById("nivaux");
-const filtreMatiere = document.getElementById("matiere");
-const nombreResultats = document.getElementById("nombre-resultats");
-const messageVide = document.getElementById("message-vide");
-
 
 function afficherCours(tableauCours) {
   let contenu = "";
 
   for (let i = 0; i < tableauCours.length; i++) {
-    const c = tableauCours[i];
-
-    contenu += `
-      <article class="bg-white border border-slate-200 rounded-xl p-4 flex flex-col gap-3">
-
-        <div class="flex justify-between items-center gap-2 flex-wrap">
-          <span class="bg-emerald-50 text-emerald-800 text-xs font-semibold px-2 py-1 rounded-full">
-            ${c.matiere}
-          </span>
-
-          <span class="text-sm text-slate-500">
-            ${c.niveau}
-          </span>
-        </div>
-
-        <h3 class="text-lg font-bold text-slate-800">
-          ${c.titre}
-        </h3>
-
-        <p class="text-sm text-slate-500">
-          ${c.creneau}
-        </p>
-
-        <p class="text-sm text-slate-500">
-          Centre : ${c.centre}
-        </p>
-
-        <div class="flex justify-between items-center gap-2 flex-wrap">
-          <p class="text-emerald-700 font-bold">
-            ${c.prix} MAD / mois
-          </p>
-
-          <p class="text-sm ${c.places === 0 ? "text-red-600" : "text-slate-500"}">
-            ${c.places === 0 ? "Complet" : c.places + " places restantes"}
-          </p>
-        </div>
-
-        <button
-          type="button"
-          data-ajouter="${c.id}"
-          ${c.places === 0 ? "disabled" : ""}
-          class="w-full min-h-11 rounded-lg p-2 text-white bg-emerald-800 disabled:bg-slate-400 disabled:cursor-not-allowed"
-        >
-          ${c.places === 0 ? "Complet" : "Ajouter à ma sélection"}
-        </button>
-
-      </article>
-    `;
+    contenu += creerCarte(tableauCours[i]);
   }
 
   listeCours.innerHTML = contenu;
+
+  for (let i = 0; i < tableauCours.length; i++) {
+    let c = tableauCours[i];
+
+    let btn = listeCours.querySelector(
+      `[data-ajouter="${c.id}"]`
+    );
+
+    if (btn && c.places > 0) {
+      btn.addEventListener("click", function() {
+        let id = c.id;
+
+        if (panierObj[id]) {
+          return;
+        }
+
+        totalPrix += Number(c.prix);
+
+        panierContenu.innerHTML += `
+          <div class="w-full flex justify-between items-center gap-3 border-b py-2">
+            <p>${c.titre}</p>
+            <p>${c.prix} MAD</p>
+
+              <button
+      type="button"
+      onclick="supprimerDuPanier(${c.id})"
+      class="bg-red-600 text-white px-3 py-1 rounded-lg"
+    >
+      Supprimer
+    </button>
+          </div>
+        `;
+
+        panierTotal.textContent = totalPrix + " MAD";
+
+        panierObj[id] = true;
+
+        panierEmpty.classList.add("hidden");
+      });
+    }
+  }
 }
 
 function filtrerCours() {
   const niveauChoisi = filtreNiveau.value;
   const matiereChoisie = filtreMatiere.value;
 
-  const resultats = [];
+  let resultats = [];
 
   for (let i = 0; i < cours.length; i++) {
-    const c = cours[i];
+    let c = cours[i];
 
-    const niveauCorrect =
+    let niveauCorrect =
       niveauChoisi === "" || c.niveau === niveauChoisi;
 
-    const matiereCorrecte =
+    let matiereCorrecte =
       matiereChoisie === "" || c.matiere === matiereChoisie;
 
     if (niveauCorrect && matiereCorrecte) {
@@ -249,15 +257,37 @@ function filtrerCours() {
 
   afficherCours(resultats);
 
-  nombreResultats.textContent =
-    resultats.length + (resultats.length > 1
-      ? " cours trouvés"
-      : " cours trouvé");
-
-  messageVide.hidden = resultats.length !== 0;
 }
 
 filtreNiveau.addEventListener("change", filtrerCours);
 filtreMatiere.addEventListener("change", filtrerCours);
 
 filtrerCours();
+
+function supprimerDuPanier(id) {
+  let coursSelectionne = cours.find(function(c) {
+    return c.id === id;
+  });
+
+  if (!coursSelectionne) {
+    return;
+  }
+
+  totalPrix -= Number(coursSelectionne.prix);
+
+  panierTotal.textContent = totalPrix + " MAD";
+
+  delete panierObj[id];
+
+  let ligne = panierContenu.querySelector(
+    `[onclick="supprimerDuPanier(${id})"]`
+  );
+
+  if (ligne) {
+    ligne.parentElement.remove();
+  }
+
+  if (Object.keys(panierObj).length === 0) {
+    panierEmpty.classList.remove("hidden");
+  }
+}
