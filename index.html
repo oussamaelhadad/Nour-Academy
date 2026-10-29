@@ -77,11 +77,168 @@
     <div id="panier" class="border rounded-lg p-4 bg-white shadow-sm">
       <h2 class="font-bold text-xl mb-4">Ma sélection</h2>
       <div id="panierContenu" class="flex flex-col items-center gap-3"></div>
-      <p id="panier-empty" class="hidden text-gray-500">Votre panier est vide.</p>
+      <p id="panier-empty" class="hidden text-gray-500 text-[20px]">Votre panier est vide.</p>
       <p class="text-[#1F6F5C] font-bold text-[19px]">Total prix : <span id="panierTotal">0 MAD</span></p>
     </div>
+
+    
+<!-- Formulaire d'inscription -->
+<div class="mt-4 rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+
+  <h2 class="mb-4 text-lg font-bold text-slate-800">
+    Mon dossier d'inscription
+  </h2>
+
+  <form id="form-inscription" class="flex flex-col gap-3">
+
+    <!-- Nom du parent -->
+    <div class="flex flex-col gap-1">
+      <label for="nom-parent" class="text-xs font-semibold text-slate-700">
+        Nom du parent
+      </label>
+      <input
+        type="text"
+        id="nom-parent"
+        required
+        class="w-full rounded-lg border border-slate-300 p-2.5 text-sm outline-none focus:border-emerald-700"
+        placeholder="Nom et prénom"
+      />
+      <small id="erreur-parent" class="text-xs text-red-600"></small>
+    </div>
+
+    <!-- Email -->
+    <div class="flex flex-col gap-1">
+      <label for="email" class="text-xs font-semibold text-slate-700">
+        Email
+      </label>
+      <input
+        type="email"
+        id="email"
+        required
+        class="w-full rounded-lg border border-slate-300 p-2.5 text-sm outline-none focus:border-emerald-700"
+        placeholder="nom@mail.com"
+      />
+      <small id="erreur-email" class="text-xs text-red-600"></small>
+    </div>
+
+    <!-- Téléphone -->
+    <div class="flex flex-col gap-1">
+      <label for="telephone" class="text-xs font-semibold text-slate-700">
+        Téléphone
+      </label>
+      <input
+        type="tel"
+        id="telephone"
+        required
+        pattern="0[5-7]( ?[0-9]){8}"
+        title="Entrez un numéro marocain de 10 chiffres."
+        class="w-full rounded-lg border border-slate-300 p-2.5 text-sm outline-none focus:border-emerald-700"
+        placeholder="06 12 34 56 78"
+      />
+      <small id="erreur-telephone" class="text-xs text-red-600"></small>
+    </div>
+
+    <!-- Prénom de l'élève -->
+    <div class="flex flex-col gap-1">
+      <label for="prenom-eleve" class="text-xs font-semibold text-slate-700">
+        Prénom de l'élève
+      </label>
+      <input
+        type="text"
+        id="prenom-eleve"
+        required
+        class="w-full rounded-lg border border-slate-300 p-2.5 text-sm outline-none focus:border-emerald-700"
+        placeholder="Ex. : Adam"
+      />
+      <small id="erreur-prenom" class="text-xs text-red-600"></small>
+    </div>
+
+    <!-- Niveau -->
+    <div class="flex flex-col gap-1">
+      <label for="niveau-eleve" class="text-xs font-semibold text-slate-700">
+        Niveau de l'élève
+      </label>
+      <select
+        id="niveau-eleve"
+        required
+        class="w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm outline-none focus:border-emerald-700"
+      >
+        <option value="">Choisir un niveau</option>
+        <option value="Primaire">Primaire</option>
+        <option value="Collège">Collège</option>
+        <option value="Tronc commun">Tronc commun</option>
+        <option value="1ère Bac">1ère Bac</option>
+        <option value="2e Bac">2e Bac</option>
+      </select>
+      <small id="erreur-niveau" class="text-xs text-red-600"></small>
+    </div>
+
+   
+    <div class="flex flex-col gap-1">
+      <label for="mot-de-passe" class="text-xs font-semibold text-slate-700">
+        Mot de passe
+      </label>
+      <input
+        type="password"
+        id="mot-de-passe"
+        required
+        minlength="8"
+        pattern="(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}"
+        title="Minimum 8 caractères, 1 majuscule, 1 chiffre et 1 caractère spécial."
+        class="w-full rounded-lg border border-slate-300 p-2.5 text-sm outline-none focus:border-emerald-700"/>
+      <small id="erreur-mdp" class="text-xs text-red-600"></small>
+    </div>
+
+    
+    <div class="flex flex-col gap-1">
+      <label for="confirmation-mdp" class="text-xs font-semibold text-slate-700">
+        Confirmer le mot de passe
+      </label>
+      <input
+        type="password"
+        id="confirmation-mdp"
+        required
+        class="w-full rounded-lg border border-slate-300 p-2.5 text-sm outline-none focus:border-emerald-700"/>
+      <small id="erreur-confirmation" class="text-xs text-red-600"></small>
+    </div>
+
+    
+    <label class="flex items-start gap-2 text-xs leading-5 text-slate-600">
+      <input
+        type="checkbox"
+        id="consentement"
+        required
+        class="mt-1 accent-emerald-700"/>
+      <span>
+        J'accepte que Nour Academy utilise ces données pour gérer l'inscription
+        de mon enfant (loi 09-08, CNDP).
+      </span>
+    </label>
+
+    <p class="text-[10px] leading-4 text-slate-500">
+      Données utilisées uniquement pour l'inscription.
+      Droit d'accès et de rectification auprès du secrétariat.
+    </p>
+
+  
+    <p id="message-inscription" role="status" aria-live="polite"
+       class="text-xs font-medium"></p>
+
+    
+    <button
+      type="submit"
+      class="w-full rounded-lg bg-[#1F6F5C] p-3 text-sm font-bold text-white hover:bg-[#185849]" >Envoyer mon inscription</button>
+
+  </form>
+</div>
+
   </div>
 </div>
 
   </body>
+  <footer>
+    <section>
+      <p class="font-bold  text-amber-50 flex justify-center min-h-[150px] items-center bg-[#1F6F5C] ">@ 2026-2027 Nour academy Nador</p>
+    </section>
+  </footer>
 </html>

@@ -291,3 +291,67 @@ function supprimerDuPanier(id) {
     panierEmpty.classList.remove("hidden");
   }
 }
+
+
+const formulaire = document.getElementById("form-inscription");
+
+const nomParent = document.getElementById("nom-parent");
+const email = document.getElementById("email");
+const telephone = document.getElementById("telephone");
+const prenomEleve = document.getElementById("prenom-eleve");
+const niveauEleve = document.getElementById("niveau-eleve");
+const motDePasse = document.getElementById("mot-de-passe");
+const confirmationMdp = document.getElementById("confirmation-mdp");
+const consentement = document.getElementById("consentement");
+
+const messageInscription = document.getElementById("message-inscription");
+
+formulaire.addEventListener("submit", function(event) {
+  event.preventDefault();
+
+
+  if (!formulaire.checkValidity()) {
+    formulaire.reportValidity();
+    return;
+  }
+
+  if (Object.keys(panierObj).length === 0) {
+    messageInscription.textContent =
+      "Veuillez sélectionner au moins un cours.";
+
+    messageInscription.className = "text-xs font-medium text-red-600";
+    return;
+  }
+
+  if (motDePasse.value !== confirmationMdp.value) {
+    document.getElementById("erreur-confirmation").textContent =
+      "Les mots de passe ne sont pas identiques.";
+
+    confirmationMdp.classList.add("border-red-500");
+    return;
+  }
+
+  document.getElementById("erreur-confirmation").textContent = "";
+  confirmationMdp.classList.remove("border-red-500");
+
+  const inscription = {
+    parent: nomParent.value.trim(),
+    email: email.value.trim(),
+    telephone: telephone.value.trim(),
+    prenomEleve: prenomEleve.value.trim(),
+    niveau: niveauEleve.value,
+    cours: Object.keys(panierObj),
+    total: totalPrix
+  };
+
+  console.log(inscription);
+
+  messageInscription.textContent =
+    "Votre dossier a été validé avec succès !";
+
+  messageInscription.className =
+    "text-xs font-medium text-emerald-700";
+
+
+  formulaire.reset();
+});
